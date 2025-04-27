@@ -1,0 +1,39 @@
+{
+  "name": "ai-conversation-simulator",
+  "version": "1.0.0",
+  "description": "A conversation simulation tool between multiple characters using AI models",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "start:chatgpt": "bun run src/index.ts chatgpt",
+    "start:gemini": "bun run src/index.ts gemini",
+    "lint:md": "markdownlint **/*.md --ignore node_modules"
+  },
+  "keywords": [
+    "ai",
+    "conversation",
+    "chatgpt",
+    "gemini",
+    "character",
+    "simulation"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bun": "latest",
+    "markdownlint-cli": "^0.44.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@google/genai": "^0.10.0",
+    "@google/generative-ai": "^0.24.0",
+    "@types/node": "^22.15.2",
+    "dotenv": "^16.5.0",
+    "openai": "^4.96.0"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

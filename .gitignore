@@ -1,0 +1,30 @@
+# 依存関係
+node_modules/
+bun.lockb
+
+# 環境変数
+.env
+
+# ログ
+*.log
+
+# IDEと編集ツール
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ビルド出力
+dist/
+build/
+out/
+
+# テスト関連
+coverage/
+
+# その他
+.tmp
+.cache
+.bunfig.toml
