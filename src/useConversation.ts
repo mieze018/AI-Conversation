@@ -106,7 +106,7 @@ export function useConversation(initialPrompt?: string) {
 	 */
 	const runConversation = async ({
 		provider,
-		maxTurns = getEnvVariable("MAX_TURNS"),
+		maxTurns,
 	}: {
 		provider: LLMProvider,
 		maxTurns: number,

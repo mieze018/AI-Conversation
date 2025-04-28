@@ -54,31 +54,25 @@
 
 ### 基本的な実行方法
 
-- `.env` でプロンプトを指定して、LLMプロバイダを選んで実行します
+- `.env` でプロンプトを指定して実行します
 
 	```dotenv
 	DEFAULT_PROMPT=今日の天気について話そう
 	```
 
 	```bash
-	# Gemini
-	bun run start:gemini
-	# ChatGPT
-	bun run start:chatgpt
+	bun run start
 	```
 
 - または引数でプロンプトを指定して実行します
 
 	```bash
-	# Gemini
-	bun run start:gemini "今日の天気について話そう" 
-	# ChatGPT
-	bun run start:chatgpt "今日の天気について話そう" 
+	bun run start "今日の天気について話そう" 
 	```
 
 ## キャラクターの作成
 
-独自のキャラクターをデフォルトから変更するには、`src/characters`ディレクトリにマークダウンファイルを作成します。
+独自のキャラクターをデフォルトから変更するには、`characters`ディレクトリにマークダウンファイルを作成します。
 
 ### キャラクター定義ファイルの構造
 
@@ -118,7 +112,6 @@ export const charactersList = {
 | `OPENAI_MODEL` | ChatGPT使用時のモデル |
 | `GEMINI_MODEL` | Gemini使用時のモデル |
 | `DEFAULT_PROVIDER` | デフォルトで使用するAIプロバイダー |
-| `MAX_TURNS` | 会話のターン数（往復回数） |
 | `TEMPERATURE` | 生成テキストのランダム性 。<br>創造的な会話: `1.0`〜`1.8`<br>一貫した応答: `0.2`〜`0.8` |
 | `MAX_RESPONSE_LENGTH` | 一度の発言の最大文字数。|
 | `CUSTOM_INSTRUCTIONS` | 指示をデフォルトから変更する場合に使用します。|

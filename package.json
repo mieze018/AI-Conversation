@@ -6,8 +6,6 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
-    "start:chatgpt": "bun run src/index.ts chatgpt",
-    "start:gemini": "bun run src/index.ts gemini",
     "lint:md": "markdownlint **/*.md --ignore node_modules"
   },
   "keywords": [

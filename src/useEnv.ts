@@ -12,11 +12,7 @@ interface EnvVariables {
 	GEMINI_API_KEY: string;
 	GEMINI_MODEL: string;
 
-	// アプリケーション設定
-	DEFAULT_PROVIDER: "gemini" | "chatgpt";
-
 	// 個人設定
-	MAX_TURNS: number;
 	DEFAULT_PROMPT: string;
 	TEMPERATURE: number;
 	MAX_RESPONSE_LENGTH: number;
@@ -27,9 +23,7 @@ interface EnvVariables {
 const defaultEnvValues: Partial<EnvVariables> = {
 	OPENAI_MODEL: "gpt-4o",
 	GEMINI_MODEL: "gemini-2.0-flash",
-	DEFAULT_PROVIDER: "gemini",
-	MAX_TURNS: 5,
-	DEFAULT_PROMPT: "",
+	DEFAULT_PROMPT: "世間話をしてください",
 	TEMPERATURE: 0.7,
 	MAX_RESPONSE_LENGTH: 300,
 	CUSTOM_INSTRUCTIONS: ""
@@ -40,7 +34,7 @@ export function getEnvVariable<K extends keyof EnvVariables>(key: K): EnvVariabl
 	const value = process.env[key];
 
 	// 数値型の場合は変換
-	if (["MAX_TURNS", "TEMPERATURE", "MAX_RESPONSE_LENGTH"].includes(key)) {
+	if (["TEMPERATURE", "MAX_RESPONSE_LENGTH"].includes(key)) {
 		return (value ? Number(value) : defaultEnvValues[key]) as EnvVariables[K];
 	}
 
@@ -55,8 +49,6 @@ export function getAllEnvVariables(): EnvVariables {
 		OPENAI_MODEL: getEnvVariable("OPENAI_MODEL"),
 		GEMINI_API_KEY: getEnvVariable("GEMINI_API_KEY"),
 		GEMINI_MODEL: getEnvVariable("GEMINI_MODEL"),
-		DEFAULT_PROVIDER: getEnvVariable("DEFAULT_PROVIDER"),
-		MAX_TURNS: getEnvVariable("MAX_TURNS"),
 		DEFAULT_PROMPT: getEnvVariable("DEFAULT_PROMPT"),
 		TEMPERATURE: getEnvVariable("TEMPERATURE"),
 		MAX_RESPONSE_LENGTH: getEnvVariable("MAX_RESPONSE_LENGTH"),
@@ -64,8 +56,20 @@ export function getAllEnvVariables(): EnvVariables {
 	};
 }
 
+// デフォルト値を取得する関数（対話型インターフェース用）
+export function getDefaultValue(key: string): any {
+	switch (key) {
+		case "PROVIDER":
+			return "gemini"; // デフォルトプロバイダ
+		case "MAX_TURNS":
+			return 5; // デフォルトターン数
+		default:
+			return defaultEnvValues[key as keyof typeof defaultEnvValues] || "";
+	}
+}
+
 // 特定のプロバイダーの設定を取得
-export function getProviderConfig(provider: "chatgpt" | "gemini" = getEnvVariable("DEFAULT_PROVIDER")) {
+export function getProviderConfig(provider: "chatgpt" | "gemini") {
 	const config = {
 		chatgpt: {
 			apiKey: getEnvVariable("OPENAI_API_KEY"),

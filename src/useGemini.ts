@@ -57,7 +57,7 @@ export function useGemini(
 	const sendMessage: LLMProvider['sendMessage'] = async (
 		character,
 		messages,
-		maxTurns = getEnvVariable("MAX_TURNS")
+		maxTurns
 	): Promise<Message | null> => {
 		try {
 			// システムプロンプトを生成
