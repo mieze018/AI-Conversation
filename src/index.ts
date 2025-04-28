@@ -16,7 +16,7 @@ async function startConversation(
 	{ providerType, prompt, turns }:
 		{ providerType: ProviderType; prompt: string; turns: number }
 ) {
-	console.log(`プロバイダ: ${providerType}で会話を開始します。会話回数は${turns}回です。参加者は${characterNames.join('、')}です。`);
+	console.log(`${providerType}を使って会話を開始します。会話回数は${turns}回です。参加者は${characterNames.join('、')}です。`);
 	console.log(getAllEnvVariables)
 	console.log(`プロンプト: "${prompt}"`);
 
