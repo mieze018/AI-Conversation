@@ -11,6 +11,7 @@ export interface AppState {
   // 会話設定
   providerType: ProviderType
   provider: LLMProvider
+  memory: string
   prompt: string
   turns: number
   customInstructions: string

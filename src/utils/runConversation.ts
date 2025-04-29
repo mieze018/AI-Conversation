@@ -1,20 +1,25 @@
 import { useHistory, useStore } from '@/store'
 import { characterIds, characters } from '@/utils/characters'
+import { generateConversationSummary } from '@/utils/generateSummary'
+import { saveMemory } from '@/utils/memoryManager'
 import { printMessage } from '@/utils/printMessage'
 import { saveConversationToFile } from '@/utils/saveConversationToFile'
 import { wait } from '@/utils/wait'
 
-import type { Message } from '@/types'
+import type { AppStore, Message } from '@/types'
 
 /**
  * キャラクター同士の会話シミュレーションを実行する
  */
 export async function runConversation(): Promise<Message[]> {
-  const { prompt, turns, provider, turnDelayMs } = useStore.get()
+  const { memory, prompt, turns, provider, turnDelayMs } = useStore.get()
   const { getHistory, addHistory } = useHistory
   console.info('--- 会話シミュレーション開始 ---')
-  // 初回の場合、初期プロンプトがあれば履歴に追加
-  if (prompt) addHistory({ role: 'system', content: prompt })
+  // メモリーと初期プロンプト履歴に追加。
+  if (memory || prompt) {
+    const systemContent = [memory, prompt].filter(Boolean).join(' ').trim();
+    addHistory({ role: 'system', content: systemContent });
+  }
 
   for (let i = 0; i < turns; i++) {
     // 次に話すキャラクターを選択
@@ -52,6 +57,16 @@ export async function runConversation(): Promise<Message[]> {
   // 最新の会話履歴を取得してから保存
   const currentHistory = getHistory()
   saveConversationToFile(currentHistory)
+
+  // 会話の要約を生成してメモリーに保存
+  console.info('会話の要約を生成しています...')
+  const summary = await generateConversationSummary(useStore.get().provider)
+
+  // メモリーに保存
+  const newMemory: AppStore['memory'] = summary
+
+  saveMemory(newMemory)
+  console.info('会話メモリーを保存しました')
 
   return currentHistory
 }

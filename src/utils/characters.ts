@@ -6,7 +6,7 @@ import { charactersList } from '../../characters/_list.js'
 import type { Character } from '@/types'
 
 // マークダウンファイルからキャラクター設定を読み込む関数
-function loadCharacterFromFile(characterId: string): string {
+export function loadCharacterFromFile(characterId: string): string {
   // ルート直下のcharactersディレクトリを参照するように修正
   const filePath = path.join(process.cwd(), 'characters', `${characterId}.md`)
   try {
