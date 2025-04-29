@@ -1,6 +1,6 @@
 import { OpenAI } from 'openai'
 
-import { useStore } from '@/store'
+import { useHistory, useStore } from '@/store'
 import { generateCharacterPrompt } from '@/utils/generateCharacterPrompt'
 
 import type { LLMProvider, Message } from '@/types'
@@ -14,7 +14,9 @@ export function useChatGPT(): LLMProvider {
   ): Promise<Message | null> => {
     try {
       // 実行時に最新のデータを取得
-      const { openaiApiKey: apiKey, openaiModel: model, temperature, maxResponseLength, history } = useStore.get()
+      const { openaiApiKey: apiKey, openaiModel: model, temperature, maxResponseLength } = useStore.get()
+      const { history } = useHistory.get()
+      // APIキーが設定されているか確認
 
       // OpenAIクライアントを初期化（毎回初期化するのは効率悪いけど、循環参照解決が優先）
       const openai = new OpenAI({ apiKey })

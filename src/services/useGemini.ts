@@ -1,6 +1,6 @@
 import { GoogleGenAI } from '@google/genai'
 
-import { useStore } from '@/store'
+import { useHistory, useStore } from '@/store'
 import { generateCharacterPrompt } from '@/utils/generateCharacterPrompt'
 
 import type { AppState, LLMProvider, Message } from '@/types'
@@ -48,7 +48,7 @@ export function useGemini(): LLMProvider {
   const sendMessage: LLMProvider['sendMessage'] = async (character): Promise<Message | null> => {
     try {
       // 実行時に最新の履歴を取得
-      const { history } = useStore.get()
+      const { history } = useHistory.get()
 
       // システムプロンプトを生成
       const systemPrompt = generateCharacterPrompt(character)

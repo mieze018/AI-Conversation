@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { createStore } from 'zustand/vanilla'
 
-import type { AppStore, LLMProvider, ProviderType } from '@/types'
+import type { AppStore, HistoryStore, LLMProvider, ProviderType } from '@/types'
 
 // 環境変数をロード
 config()
@@ -47,13 +47,35 @@ export const appStore = createStore<AppStore>()((_set, _get) => ({
   customInstructions: (process.env.CUSTOM_INSTRUCTIONS || defaultInstructions).toString(),
   temperature: Number(process.env.TEMPERATURE || '0.7'),
   maxResponseLength: Number(process.env.MAX_RESPONSE_LENGTH || '300'),
-  history: [],
   provider: dummyProvider, // 初期値はダミープロバイダー
   turnDelayMs: 1000,
 }))
 
+/**
+ * storeユーティリティ
+ */
 export const useStore = {
   get: appStore.getState,
   set: appStore.setState,
   subscribe: appStore.subscribe,
+}
+
+/**
+ * 会話履歴ストア
+ */
+export const historyStore = createStore<HistoryStore>((set, get) => ({
+  history: [],
+  getHistory: () => get().history,
+  addHistory: (message) => {
+    set({ history: [...get().history, message] })
+  },
+  clearHistory: () => set({ history: [] }),
+}))
+export const useHistory = {
+  get: historyStore.getState,
+  set: historyStore.setState,
+  subscribe: historyStore.subscribe,
+  addHistory: historyStore.getState().addHistory,
+  clearHistory: historyStore.getState().clearHistory,
+  getHistory: historyStore.getState().getHistory,
 }

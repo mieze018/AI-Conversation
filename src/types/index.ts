@@ -16,14 +16,20 @@ export interface AppState {
   customInstructions: string
   temperature: number
   maxResponseLength: number
-  // 会話履歴
-  history: Message[]
   turnDelayMs: number
 
 }
 export interface AppActions {
 }
-export type AppStore = AppState & AppActions
+export interface AppStore extends AppState, AppActions {
+}
+
+export interface HistoryStore {
+  history: Message[]
+  getHistory: () => Message[]
+  addHistory: (message: Message) => void
+  clearHistory: () => void
+}
 export interface Character {
   name: string
   persona: string // このキャラクターの性格や口調、背景設定
