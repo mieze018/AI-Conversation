@@ -45,11 +45,11 @@ export function useConversation() {
 				key => characters[key].name === message.speaker
 			) || '';
 
-			console.log(`\n<div class="${speakerKey}" count="${index + 1}">`);
-			console.log(`${message.speaker}: ${message.content}`);
-			console.log(`</div>`);
+			console.info(`\n<div class="${speakerKey}" count="${index + 1}">`);
+			console.info(`${message.speaker}: ${message.content}`);
+			console.info(`</div>`);
 		} else {
-			console.log(`${message.role}: ${message.content}`);
+			console.info(`${message.role}: ${message.content}`);
 		}
 	};
 
@@ -66,7 +66,7 @@ export function useConversation() {
 	 * キャラクター同士の会話シミュレーションを実行する
 	 */
 	const runConversation = async (): Promise<Message[]> => {
-		console.log("--- 会話シミュレーション開始 ---");
+		console.info("--- 会話シミュレーション開始 ---");
 
 		for (let i = 0; i < turns; i++) {
 			// 次に話すキャラクターを選択

@@ -7,9 +7,9 @@ import { askUserInput } from '@/utils/askUserInput';
  * @returns 選択されたプロバイダタイプ
  */
 async function selectProvider(): Promise<ProviderType> {
-	console.log('使用するAIプロバイダを選択してください:');
-	console.log('1. Gemini');
-	console.log('2. ChatGPT');
+	console.info('使用するAIプロバイダを選択してください:');
+	console.info('1. Gemini');
+	console.info('2. ChatGPT');
 
 	const defaultProvider = useStore.get().providerType;
 	const defaultOption = defaultProvider === 'gemini' ? '1' : '2';
@@ -17,7 +17,7 @@ async function selectProvider(): Promise<ProviderType> {
 	let selection = await askUserInput('番号を入力', defaultOption);
 
 	while (selection !== '1' && selection !== '2') {
-		console.log('無効な選択です。1か2を入力してください。');
+		console.info('無効な選択です。1か2を入力してください。');
 		selection = await askUserInput('番号を入力', defaultOption);
 	}
 	const providerType = selection === '1' ? 'gemini' : 'chatgpt';
@@ -34,7 +34,7 @@ async function selectTurns(): Promise<number> {
 
 	const turns = parseInt(turnsInput, 10);
 	if (isNaN(turns) || turns < 1) {
-		console.log('無効なターン数です。1以上の数値を入力してください。');
+		console.info('無効なターン数です。1以上の数値を入力してください。');
 		return selectTurns();
 	}
 	return turns;

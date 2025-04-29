@@ -18,9 +18,9 @@ export const saveConversationToFile = (history: Message[]) => {
 
 		const filePath = path.join(distDir, fileName);
 		fs.writeFileSync(filePath, JSON.stringify(history, null, 2));
-		console.log(`Conversation history saved to ${filePath}`);
+		console.info(`Conversation history saved to ${filePath}`);
 	} catch (error) {
 		console.error('Error writing file:', error);
-		console.log(history);
+		console.info(history);
 	}
 };

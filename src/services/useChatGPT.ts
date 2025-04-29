@@ -3,7 +3,7 @@ import { OpenAI } from "openai";
 import { useConversation } from "@/modules/useConversation";
 import { useStore } from '@/store';
 
-import type { Character, Message, LLMProvider } from "@/types";
+import type { Message, LLMProvider } from "@/types";
 
 /**
  * ChatGPT用のフック

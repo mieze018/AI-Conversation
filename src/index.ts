@@ -5,9 +5,6 @@ import { useGemini } from '@/services/useGemini';
 import { useStore } from '@/store';
 import { characterNames } from '@/utils/characters';
 
-import type { LLMProvider } from '@/types';
-
-
 // メイン処理
 async function startConversation() {
 
@@ -17,11 +14,10 @@ async function startConversation() {
 	// 会話を開始（設定はストアから取得）
 	const { providerType, prompt, turns } = useStore.get();
 
-	console.log(`${providerType}を使って会話を開始します。参加者は${characterNames.join('、')}、会話回数は${turns}回です。`);
-	console.log(`プロンプト: "${prompt}"`);
+	console.info(`${providerType}を使って会話を開始します。参加者は${characterNames.join('、')}、会話回数は${turns}回です。`);
+	console.info(`プロンプト: "${prompt}"`);
 
 	// プロバイダの選択
-	let provider: LLMProvider;
 	if (providerType === 'chatgpt') {
 		useStore.set({ provider: useChatGPT() })
 	} else {

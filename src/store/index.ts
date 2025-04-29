@@ -34,7 +34,7 @@ const dummyProvider: LLMProvider = {
 /**
  * アプリケーションストア
  */
-export const appStore = createStore<AppStore>()((set, get) => ({
+export const appStore = createStore<AppStore>()((_set, _get) => ({
 	// 環境変数をストアに設定
 	openaiApiKey: (process.env.OPENAI_API_KEY || '').toString(),
 	openaiModel: (process.env.OPENAI_MODEL || '').toString(),

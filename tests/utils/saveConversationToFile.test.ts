@@ -23,9 +23,9 @@ describe('saveConversationToFile', () => {
 			// 注意: このテストは実際にファイルを書き込みます
 			try {
 				saveConversationToFile(mockHistory);
-			} catch (e) {
+			} catch {
 				// エラーが発生しても許容する（CI環境などでは書き込み権限がない可能性）
-				console.log('テスト中にエラーが発生しましたが、関数の存在確認のみなので続行します');
+				console.info('テスト中にエラーが発生しましたが、関数の存在確認のみなので続行します');
 			}
 		}).not.toThrow();
 	});
