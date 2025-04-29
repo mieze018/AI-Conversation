@@ -11,7 +11,12 @@ export function useConversation() {
 	const turnDelayMs = 1000;
 	const getHistory = () => useStore.get().history;
 	const clearHistory = () => useStore.set({ history: [] });
-	const addMessage = (message: Message) => useStore.set({ history: [...history, message] });
+
+	// 常に最新の履歴を取得してから更新するように修正
+	const addMessage = (message: Message) => {
+		const currentHistory = getHistory();
+		useStore.set({ history: [...currentHistory, message] });
+	};
 
 	/**
 	 * キャラクター用のシステムプロンプトを生成
@@ -90,10 +95,11 @@ export function useConversation() {
 			}
 		}
 
-		// 会話履歴を保存
-		saveConversationToFile(history);
+		// 最新の会話履歴を取得してから保存
+		const currentHistory = getHistory();
+		saveConversationToFile(currentHistory);
 
-		return getHistory();
+		return currentHistory;
 	};
 
 	// 初回の場合、初期プロンプトがあれば履歴に追加
