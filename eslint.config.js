@@ -42,7 +42,7 @@ export default [
     files: ['**/*.ts'],
     plugins: {
       '@typescript-eslint': tseslint,
-      import: importPlugin,
+      'import': importPlugin,
       '@stylistic': stylistic, // スタイリスティックプラグインを登録
     },
     languageOptions: {
@@ -76,7 +76,7 @@ export default [
       'import/order': [
         'error',
         {
-          groups: [
+          'groups': [
             'builtin',
             'external',
             'internal',
@@ -87,7 +87,7 @@ export default [
             'type',
           ],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          'alphabetize': { order: 'asc', caseInsensitive: true },
         },
       ],
       'import/no-unresolved': 'error',
@@ -98,14 +98,14 @@ export default [
   {
     files: ['**/*.js'],
     plugins: {
-      import: importPlugin,
+      'import': importPlugin,
       '@stylistic': stylistic, // JSファイルにもスタイリスティックプラグインを登録
     },
     rules: {
       'import/order': [
         'error',
         {
-          groups: [
+          'groups': [
             'builtin',
             'external',
             'internal',
@@ -116,7 +116,7 @@ export default [
             'type',
           ],
           'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
+          'alphabetize': { order: 'asc', caseInsensitive: true },
         },
       ],
     },

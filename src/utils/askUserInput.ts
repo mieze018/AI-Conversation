@@ -5,16 +5,16 @@
  * @returns ユーザーの入力値
  */
 export async function askUserInput(
-	message: string,
-	defaultValue?: string
+  message: string,
+  defaultValue?: string,
 ): Promise<string> {
-	process.stdout.write(`${message}${defaultValue ? ` (デフォルト: ${defaultValue})` : ''}: `);
+  process.stdout.write(`${message}${defaultValue ? ` (デフォルト: ${defaultValue})` : ''}: `)
 
-	const input = await new Promise<string>(resolve => {
-		process.stdin.once('data', data => {
-			resolve(data.toString().trim());
-		});
-	});
+  const input = await new Promise<string>((resolve) => {
+    process.stdin.once('data', (data) => {
+      resolve(data.toString().trim())
+    })
+  })
 
-	return input || defaultValue || '';
+  return input || defaultValue || ''
 }
