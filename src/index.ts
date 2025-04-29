@@ -1,9 +1,9 @@
-import { useChatGPT } from '@/useChatGPT';
-import { useGemini } from '@/useGemini';
-import { useConversation } from '@/useConversation';
-import { characterNames } from '@/characters';
+import { useChatGPT } from '@/services/useChatGPT';
+import { useGemini } from '@/services/useGemini';
+import { useConversation } from '@/modules/useConversation';
+import { characterNames } from '@/utils/characters';
 import type { LLMProvider } from '@/types';
-import { getConversationSettings } from '@/usePrompt';
+import { getConversationSettings } from '@/modules/getConversationSettings';
 import { useStore } from '@/store';
 
 // メイン処理

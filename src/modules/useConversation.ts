@@ -1,7 +1,6 @@
 import type { Character, Message } from '@/types';
-import { characters, characterNames, characterIds } from '@/characters';
-import * as fs from 'fs';
-import * as path from 'path';
+import { characters, characterNames, characterIds } from '@/utils/characters';
+import { saveConversationToFile } from '@/utils/saveConversationToFile';
 import { useStore } from '@/store';
 
 /**
@@ -56,28 +55,6 @@ export function useConversation() {
 		return new Promise(resolve => setTimeout(resolve, ms));
 	};
 
-	/**
-	 * 会話履歴をJSONファイルとして保存
-	 */
-	const saveConversationToFile = () => {
-		try {
-			const formattedDate = new Date().toISOString().replace(/:/g, '-').replace(/\..+/, '');
-			const fileName = `conversation_${formattedDate}.json`;
-			const distDir = path.join(__dirname, '../dist');
-
-			// distディレクトリが存在しない場合は作成
-			if (!fs.existsSync(distDir)) {
-				fs.mkdirSync(distDir, { recursive: true });
-			}
-
-			const filePath = path.join(distDir, fileName);
-			fs.writeFileSync(filePath, JSON.stringify(history, null, 2));
-			console.log(`Conversation history saved to ${filePath}`);
-		} catch (error) {
-			console.error('Error writing file:', error);
-			console.log(history);
-		}
-	};
 
 	/**
 	 * キャラクター同士の会話シミュレーションを実行する
@@ -114,7 +91,7 @@ export function useConversation() {
 		}
 
 		// 会話履歴を保存
-		saveConversationToFile();
+		saveConversationToFile(history);
 
 		return getHistory();
 	};

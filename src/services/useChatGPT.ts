@@ -1,6 +1,6 @@
 import { OpenAI } from "openai";
 import type { Character, Message, LLMProvider } from "@/types";
-import { useConversation } from "@/useConversation";
+import { useConversation } from "@/modules/useConversation";
 import { useStore } from '@/store';
 
 /**

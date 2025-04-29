@@ -1,26 +1,7 @@
 import { type ProviderType } from '@/types';
 import { useStore } from '@/store';
+import { askUserInput } from '@/utils/askUserInput';
 
-/**
- * 対話形式でユーザーから入力を取得する
- * @param message - 表示するメッセージ
- * @param defaultValue - デフォルト値（何も入力せずEnterを押した場合）
- * @returns ユーザーの入力値
- */
-async function promptUser(
-	message: string,
-	defaultValue?: string
-): Promise<string> {
-	process.stdout.write(`${message}${defaultValue ? ` (デフォルト: ${defaultValue})` : ''}: `);
-
-	const input = await new Promise<string>(resolve => {
-		process.stdin.once('data', data => {
-			resolve(data.toString().trim());
-		});
-	});
-
-	return input || defaultValue || '';
-}
 /**
  * 対話形式でプロバイダを選択する
  * @returns 選択されたプロバイダタイプ
@@ -33,11 +14,11 @@ async function selectProvider(): Promise<ProviderType> {
 	const defaultProvider = useStore.get().providerType;
 	const defaultOption = defaultProvider === 'gemini' ? '1' : '2';
 
-	let selection = await promptUser('番号を入力', defaultOption);
+	let selection = await askUserInput('番号を入力', defaultOption);
 
 	while (selection !== '1' && selection !== '2') {
 		console.log('無効な選択です。1か2を入力してください。');
-		selection = await promptUser('番号を入力', defaultOption);
+		selection = await askUserInput('番号を入力', defaultOption);
 	}
 	const providerType = selection === '1' ? 'gemini' : 'chatgpt';
 	return providerType;
@@ -49,7 +30,7 @@ async function selectProvider(): Promise<ProviderType> {
  */
 async function selectTurns(): Promise<number> {
 	const defaultTurns = useStore.get().turns;
-	const turnsInput = await promptUser('会話のターン数を入力してください', `${defaultTurns}`);
+	const turnsInput = await askUserInput('会話のターン数を入力してください', `${defaultTurns}`);
 
 	const turns = parseInt(turnsInput, 10);
 	if (isNaN(turns) || turns < 1) {
@@ -65,7 +46,7 @@ async function selectTurns(): Promise<number> {
  */
 async function getConversationPrompt(): Promise<string> {
 	const defaultPrompt = useStore.get().prompt;
-	const prompt = await promptUser('会話の開始プロンプトを入力してください', defaultPrompt);
+	const prompt = await askUserInput('会話の開始プロンプトを入力してください', defaultPrompt);
 	return prompt;
 }
 

@@ -1,5 +1,5 @@
 import type { Message, LLMProvider, AppState } from '@/types';
-import { useConversation } from '@/useConversation';
+import { useConversation } from '@/modules/useConversation';
 import { GoogleGenAI } from '@google/genai';
 import { useStore } from '@/store';
 
