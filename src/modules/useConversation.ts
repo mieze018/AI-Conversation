@@ -1,15 +1,17 @@
 import { useStore } from '@/store'
-import { characters, characterNames, characterIds } from '@/utils/characters'
+import { characterIds, characters } from '@/utils/characters'
+import { generateCharacterPrompt } from '@/utils/generateCharacterPrompt'
+import { printMessage } from '@/utils/printMessage'
 import { saveConversationToFile } from '@/utils/saveConversationToFile'
+import { wait } from '@/utils/wait'
 
-import type { Character, Message } from '@/types'
+import type { Message } from '@/types'
 
 /**
  * 会話履歴を管理
  */
 export function useConversation() {
-  const { turns, maxResponseLength, customInstructions, prompt, provider, history } = useStore.get()
-  const turnDelayMs = 1000
+  const { turns, prompt, provider, history, turnDelayMs } = useStore.get()
   const getHistory = () => useStore.get().history
   const clearHistory = () => useStore.set({ history: [] })
 
@@ -17,49 +19,6 @@ export function useConversation() {
   const addMessage = (message: Message) => {
     const currentHistory = getHistory()
     useStore.set({ history: [...currentHistory, message] })
-  }
-
-  /**
-   * キャラクター用のシステムプロンプトを生成
-   * @param character - キャラクター情報
-   */
-  const generateCharacterPrompt = (character: Character): string => {
-    return `
-- あなたは「${character.name}」というキャラクターです。会話の続きを自然な日本語で発言してください。
-- 会話の参加メンバーは${characterNames.join('、')}です。
-- あなたの設定: ${character.persona}
-  あなたの役割: 会話の流れを考慮して、前の発言に自然に反応してください。会話がスムーズに進むように心がけてください。
-- 一度の発言は、${maxResponseLength}文字以内に収めてください。
-${customInstructions}
-  `
-  }
-
-  /**
-   * メッセージを標準出力に表示
-   * @param message - 表示するメッセージ
-   * @param index - 会話のインデックス
-   */
-  const printMessage = (message: Message, index: number) => {
-    if (message.speaker) {
-      const speakerKey = Object.keys(characters).find(
-        key => characters[key].name === message.speaker,
-      ) || ''
-
-      console.info(`\n<div class="${speakerKey}" count="${index + 1}">`)
-      console.info(`${message.speaker}: ${message.content}`)
-      console.info(`</div>`)
-    }
-    else {
-      console.info(`${message.role}: ${message.content}`)
-    }
-  }
-
-  /**
-   * 指定時間待機する
-   * @param ms - 待機時間（ミリ秒）
-   */
-  const wait = async (ms: number = turnDelayMs): Promise<void> => {
-    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   /**
@@ -83,7 +42,11 @@ ${customInstructions}
 
       if (newMessage) {
         addMessage(newMessage)
-        printMessage(newMessage, i)
+        printMessage({
+          message: newMessage,
+          speakerKey: currentSpeakerKey,
+          turn: i + 1,
+        })
       }
       else {
         console.warn(`Warning: ${currentSpeaker.name} generated an invalid response.`)
@@ -93,7 +56,7 @@ ${customInstructions}
 
       // 次のターンの前に待機
       if (i < turns - 1) {
-        await wait()
+        await wait(turnDelayMs)
       }
     }
 
@@ -116,7 +79,6 @@ ${customInstructions}
     addMessage,
     generateCharacterPrompt,
     printMessage,
-    wait,
     saveConversationToFile,
     runConversation,
   }

@@ -24,7 +24,6 @@ async function startConversation() {
     useStore.set({ provider: useGemini() })
   }
 
-  // 最初の会話を実行
   const conversation = useConversation()
   // 以降の会話の実行
   await conversation.runConversation()

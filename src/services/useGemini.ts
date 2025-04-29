@@ -1,9 +1,9 @@
 import { GoogleGenAI } from '@google/genai'
 
-import { useConversation } from '@/modules/useConversation'
 import { useStore } from '@/store'
+import { generateCharacterPrompt } from '@/utils/generateCharacterPrompt'
 
-import type { Message, LLMProvider, AppState } from '@/types'
+import type { AppState, LLMProvider, Message } from '@/types'
 
 /**
  * Gemini用のフック
@@ -42,8 +42,6 @@ export function useGemini(): LLMProvider {
     return { response: result.join('') }
   }
 
-  const conversation = useConversation()
-
   /**
    * メッセージを送信してGeminiからの応答を取得
    */
@@ -53,7 +51,7 @@ export function useGemini(): LLMProvider {
       const { history } = useStore.get()
 
       // システムプロンプトを生成
-      const systemPrompt = conversation.generateCharacterPrompt(character)
+      const systemPrompt = generateCharacterPrompt(character)
 
       // プロンプトを構築
       const prompt = `${systemPrompt}

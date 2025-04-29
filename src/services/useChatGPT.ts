@@ -1,16 +1,14 @@
 import { OpenAI } from 'openai'
 
-import { useConversation } from '@/modules/useConversation'
 import { useStore } from '@/store'
+import { generateCharacterPrompt } from '@/utils/generateCharacterPrompt'
 
-import type { Message, LLMProvider } from '@/types'
+import type { LLMProvider, Message } from '@/types'
 
 /**
  * ChatGPT用のフック
  */
 export function useChatGPT(): LLMProvider {
-  const conversation = useConversation()
-
   const sendMessage: LLMProvider['sendMessage'] = async (
     character,
   ): Promise<Message | null> => {
@@ -22,7 +20,7 @@ export function useChatGPT(): LLMProvider {
       const openai = new OpenAI({ apiKey })
 
       // システムプロンプトを生成
-      const systemPrompt = conversation.generateCharacterPrompt(character)
+      const systemPrompt = generateCharacterPrompt(character)
 
       // 会話にシステムプロンプトを追加
       const apiMessages = [
