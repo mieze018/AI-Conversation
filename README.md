@@ -51,6 +51,12 @@
 	GEMINI_MODEL=gemini-2.0-flash
 	```
 
+3. `characters/list.example.js`をコピーして`characters/list.js`に名称変更します。
+
+	```bash
+	cp characters/list.example.js characters/list.js
+	```
+
 ## 使い方
 
 下記のコマンドを実行すると、対話形式でオプションを設定し、会話を開始します。
@@ -82,7 +88,7 @@ bun start
 
 ### キャラクターの登録
 
-新しいキャラクターを作成したら、`characters/_list.js`にキャラクターを登録します：
+新しいキャラクターを作成したら、`characters/list.js`にキャラクターを登録します：
 
 ```javascript
 export const charactersList = {
