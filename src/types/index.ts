@@ -18,6 +18,7 @@ export interface AppState {
   maxResponseLength: number
   // 会話履歴
   history: Message[]
+  turnDelayMs: number
 
 }
 export interface AppActions {

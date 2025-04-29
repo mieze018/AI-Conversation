@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { createStore } from 'zustand/vanilla'
 
-import type { AppStore, ProviderType, LLMProvider } from '@/types'
+import type { AppStore, LLMProvider, ProviderType } from '@/types'
 
 // 環境変数をロード
 config()
@@ -49,6 +49,7 @@ export const appStore = createStore<AppStore>()((_set, _get) => ({
   maxResponseLength: Number(process.env.MAX_RESPONSE_LENGTH || '300'),
   history: [],
   provider: dummyProvider, // 初期値はダミープロバイダー
+  turnDelayMs: 1000,
 }))
 
 export const useStore = {
