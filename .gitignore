@@ -10,7 +10,6 @@ bun.lockb
 
 # IDEと編集ツール
 .idea/
-.vscode/
 *.swp
 *.swo
 .DS_Store
