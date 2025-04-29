@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
-    "lint:md": "markdownlint **/*.md --ignore node_modules"
+    "lint:md": "markdownlint **/*.md --ignore node_modules",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "ai",
@@ -19,7 +21,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest",
-    "markdownlint-cli": "^0.44.0"
+    "markdownlint-cli": "^0.44.0",
+    "vitest": "^3.1.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
