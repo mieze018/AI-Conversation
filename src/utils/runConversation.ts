@@ -17,8 +17,8 @@ export async function runConversation(): Promise<Message[]> {
   console.info('--- 会話シミュレーション開始 ---')
   // メモリーと初期プロンプト履歴に追加。
   if (memory || prompt) {
-    const systemContent = [memory, prompt].filter(Boolean).join(' ').trim();
-    addHistory({ role: 'system', content: systemContent });
+    const systemContent = [memory, prompt].filter(Boolean).join(' ').trim()
+    addHistory({ role: 'system', content: systemContent })
   }
 
   for (let i = 0; i < turns; i++) {

@@ -26,7 +26,6 @@ export function useGemini(): LLMProvider {
     if (!genAI) {
       throw new Error('Gemini API client initialization failed.')
     }
-    console.info('プロンプト', contents)
     const response = await genAI.models.generateContentStream({
       model: model,
       contents,
