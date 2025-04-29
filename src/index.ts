@@ -22,6 +22,10 @@ async function startConversation() {
 
   // 会話の実行
   await runConversation()
+
+  // 全ての処理が完了したらプロセスを終了
+  console.info('会話が終了しました。プログラムを終了します。')
+  process.exit(0)
 }
 
 // プログラム実行
