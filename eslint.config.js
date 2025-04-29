@@ -1,5 +1,6 @@
 // ESLint v9 config file
 import eslint from '@eslint/js'
+import stylistic from '@stylistic/eslint-plugin' // スタイリスティックプラグインを追加
 import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import importPlugin from 'eslint-plugin-import'
@@ -11,6 +12,8 @@ export default [
   },
   // JS共通設定
   eslint.configs.recommended,
+  // スタイリスティックのおすすめ設定を追加
+  stylistic.configs.recommended,
   // Node.js環境設定（グローバル変数を許可）
   {
     languageOptions: {
@@ -33,12 +36,14 @@ export default [
       },
     },
   },
+  stylistic.configs.customize({}),
   // TypeScript設定
   {
     files: ['**/*.ts'],
     plugins: {
       '@typescript-eslint': tseslint,
       import: importPlugin,
+      '@stylistic': stylistic, // スタイリスティックプラグインを登録
     },
     languageOptions: {
       parser: tsParser,
@@ -94,6 +99,7 @@ export default [
     files: ['**/*.js'],
     plugins: {
       import: importPlugin,
+      '@stylistic': stylistic, // JSファイルにもスタイリスティックプラグインを登録
     },
     rules: {
       'import/order': [
