@@ -6,6 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "bun run src/index.ts",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
     "lint:md": "markdownlint **/*.md --ignore node_modules",
     "test": "vitest run",
     "test:watch": "vitest"
@@ -21,6 +23,11 @@
   "license": "MIT",
   "devDependencies": {
     "@types/bun": "latest",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
     "markdownlint-cli": "^0.44.0",
     "vitest": "^3.1.2"
   },
