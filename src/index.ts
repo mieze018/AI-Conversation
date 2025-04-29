@@ -1,4 +1,4 @@
-import { getConversationSettings } from '@/modules/getConversationSettings';
+import { getConversationSettings } from '@/modules/getSettings';
 import { useConversation } from '@/modules/useConversation';
 import { useChatGPT } from '@/services/useChatGPT';
 import { useGemini } from '@/services/useGemini';

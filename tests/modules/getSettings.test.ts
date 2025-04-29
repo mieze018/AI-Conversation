@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 
-import { getConversationSettings } from '@/modules/getConversationSettings';
+import { getConversationSettings } from '@/modules/getSettings';
 
 describe('getConversationSettings', () => {
 	it('getConversationSettingsは関数であること', () => {
