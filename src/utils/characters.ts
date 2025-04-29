@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-import { charactersList } from '../../characters/_list.js'
+import { charactersList } from '../../characters/list'
 
 import type { Character } from '@/types'
 
@@ -18,7 +18,7 @@ function loadCharacterFromFile(characterId: string): string {
   }
 }
 
-// _list.jsから動的にキャラクター情報を生成
+// list.jsから動的にキャラクター情報を生成
 export const characters: Record<string, Character> = Object.entries(charactersList).reduce(
   (acc, [id, info]) => ({
     ...acc,
