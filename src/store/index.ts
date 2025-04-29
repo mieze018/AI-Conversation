@@ -12,7 +12,7 @@ const defaultInstructions = `
 # 発言の特徴: 
 - キャラクターの個性や口調を一貫して維持してください
 - キャラクターらしい反応や感情を表現してください
-- 最初のシステムプロンプトを軸に会話してください。
+- 最初のシステムプロンプトを軸に具体的に会話してください。
 - 他のキャラクターの発言内容に着想を得て会話を発展させてください
 # 避けるべきこと: 
 - 長すぎる説明や独白
@@ -44,6 +44,7 @@ export const appStore = createStore<AppStore>()((_set, _get) => ({
   geminiModel: (process.env.GEMINI_MODEL || '').toString(),
 
   providerType: (process.env.DEFAULT_PROVIDER || 'gemini').toString() as ProviderType,
+  memory: '',
   prompt: (process.env.DEFAULT_PROMPT || '').toString(),
   turns: 5,
   customInstructions: (process.env.CUSTOM_INSTRUCTIONS || defaultInstructions).toString(),
