@@ -1,7 +1,8 @@
-import type { Character, Message } from '@/types';
+import { useStore } from '@/store';
 import { characters, characterNames, characterIds } from '@/utils/characters';
 import { saveConversationToFile } from '@/utils/saveConversationToFile';
-import { useStore } from '@/store';
+
+import type { Character, Message } from '@/types';
 
 /**
  * 会話履歴を管理

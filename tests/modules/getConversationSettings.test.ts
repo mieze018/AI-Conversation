@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { getConversationSettings } from '@/modules/getConversationSettings';
 
 describe('getConversationSettings', () => {

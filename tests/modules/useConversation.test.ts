@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { useConversation } from '@/modules/useConversation';
-import * as SaveConversationModule from '@/utils/saveConversationToFile';
 import { useStore } from '@/store';
+import * as SaveConversationModule from '@/utils/saveConversationToFile';
+
 import type { Message } from '@/types';
 
 // テスト用のモックストア

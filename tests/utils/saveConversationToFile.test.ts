@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
+
 import { saveConversationToFile } from '@/utils/saveConversationToFile';
+
 import type { Message } from '@/types';
 
 // シンプルな方法でテスト

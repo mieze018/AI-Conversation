@@ -1,5 +1,5 @@
-import { afterEach, beforeEach, vi } from 'vitest';
 import * as dotenv from 'dotenv';
+import { afterEach, beforeEach, vi } from 'vitest';
 
 // 環境変数をロード
 dotenv.config();

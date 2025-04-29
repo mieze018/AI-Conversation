@@ -1,7 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import type { Character } from '@/types';
+
 import { charactersList } from '../../characters/_list.js';
+
+import type { Character } from '@/types';
 
 // マークダウンファイルからキャラクター設定を読み込む関数
 function loadCharacterFromFile(characterId: string): string {

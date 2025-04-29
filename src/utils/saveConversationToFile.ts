@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
 import type { Message } from '@/types';
 /**
  * 会話履歴をJSONファイルとして保存

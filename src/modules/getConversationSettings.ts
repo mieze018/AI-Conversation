@@ -1,5 +1,5 @@
-import { type ProviderType } from '@/types';
 import { useStore } from '@/store';
+import { type ProviderType } from '@/types';
 import { askUserInput } from '@/utils/askUserInput';
 
 /**

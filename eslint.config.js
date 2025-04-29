@@ -11,6 +11,28 @@ export default [
   },
   // JS共通設定
   eslint.configs.recommended,
+  // Node.js環境設定（グローバル変数を許可）
+  {
+    languageOptions: {
+      globals: {
+        // Node.js グローバル
+        console: 'readonly',
+        process: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        Buffer: 'readonly',
+        module: 'readonly',
+        require: 'readonly',
+        // DOM グローバル (念のため)
+        document: 'readonly',
+        window: 'readonly',
+      },
+    },
+  },
   // TypeScript設定
   {
     files: ['**/*.ts'],

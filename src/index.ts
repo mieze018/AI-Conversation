@@ -1,10 +1,12 @@
+import { getConversationSettings } from '@/modules/getConversationSettings';
+import { useConversation } from '@/modules/useConversation';
 import { useChatGPT } from '@/services/useChatGPT';
 import { useGemini } from '@/services/useGemini';
-import { useConversation } from '@/modules/useConversation';
-import { characterNames } from '@/utils/characters';
-import type { LLMProvider } from '@/types';
-import { getConversationSettings } from '@/modules/getConversationSettings';
 import { useStore } from '@/store';
+import { characterNames } from '@/utils/characters';
+
+import type { LLMProvider } from '@/types';
+
 
 // メイン処理
 async function startConversation() {

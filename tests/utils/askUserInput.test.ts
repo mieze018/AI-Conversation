@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { askUserInput } from '@/utils/askUserInput';
 
 describe('askUserInput', () => {

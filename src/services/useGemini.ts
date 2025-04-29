@@ -1,7 +1,9 @@
-import type { Message, LLMProvider, AppState } from '@/types';
-import { useConversation } from '@/modules/useConversation';
 import { GoogleGenAI } from '@google/genai';
+
+import { useConversation } from '@/modules/useConversation';
 import { useStore } from '@/store';
+
+import type { Message, LLMProvider, AppState } from '@/types';
 
 /**
  * Gemini用のフック

@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { characters, characterIds, characterNames } from '@/utils/characters';
 
 // シンプルな方法でテスト（モックなし）
