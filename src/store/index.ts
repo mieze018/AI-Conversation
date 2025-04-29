@@ -1,7 +1,9 @@
 import { config } from 'dotenv'
 import { createStore } from 'zustand/vanilla'
 
-import type { AppStore, HistoryStore, LLMProvider, ProviderType } from '@/types'
+import { historyStore, useHistory } from './history'
+
+import type { AppStore, LLMProvider, ProviderType } from '@/types'
 
 // 環境変数をロード
 config()
@@ -60,22 +62,5 @@ export const useStore = {
   subscribe: appStore.subscribe,
 }
 
-/**
- * 会話履歴ストア
- */
-export const historyStore = createStore<HistoryStore>((set, get) => ({
-  history: [],
-  getHistory: () => get().history,
-  addHistory: (message) => {
-    set({ history: [...get().history, message] })
-  },
-  clearHistory: () => set({ history: [] }),
-}))
-export const useHistory = {
-  get: historyStore.getState,
-  set: historyStore.setState,
-  subscribe: historyStore.subscribe,
-  addHistory: historyStore.getState().addHistory,
-  clearHistory: historyStore.getState().clearHistory,
-  getHistory: historyStore.getState().getHistory,
-}
+// historyStoreを別ファイルからエクスポート
+export { historyStore, useHistory }
