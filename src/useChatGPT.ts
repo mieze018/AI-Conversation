@@ -1,49 +1,43 @@
 import { OpenAI } from "openai";
 import type { Character, Message, LLMProvider } from "@/types";
 import { useConversation } from "@/useConversation";
-import { getEnvVariable, getProviderConfig } from "@/useEnv";
-
-const openaiConfig = getProviderConfig("chatgpt");
-const openai = new OpenAI({
-	apiKey: openaiConfig.apiKey,
-});
+import { useStore } from '@/store';
 
 /**
  * ChatGPT用のフック
- * @param model - 使用するモデル名（省略時は環境変数から取得）
- * @param temperature - 温度パラメータ（省略時は環境変数から取得）
- * @returns ChatGPTのLLMプロバイダインターフェース
  */
-export function useChatGPT(
-	model: string = getEnvVariable("OPENAI_MODEL"),
-	temperature: number = getEnvVariable("TEMPERATURE")
-): LLMProvider {
+export function useChatGPT(): LLMProvider {
+
 	const conversation = useConversation();
 
 	const sendMessage: LLMProvider['sendMessage'] = async (
 		character,
-		messages,
-		maxTurns
 	): Promise<Message | null> => {
 		try {
+			// 実行時に最新のデータを取得
+			const { openaiApiKey: apiKey, openaiModel: model, temperature, maxResponseLength, history } = useStore.get();
+
+			// OpenAIクライアントを初期化（毎回初期化するのは効率悪いけど、循環参照解決が優先）
+			const openai = new OpenAI({ apiKey });
+
 			// システムプロンプトを生成
-			const systemPrompt = conversation.generateSystemPrompt(character, maxTurns);
+			const systemPrompt = conversation.generateCharacterPrompt(character);
 
 			// 会話にシステムプロンプトを追加
 			const apiMessages = [
 				{ role: "system", content: systemPrompt },
-				...messages,
+				...history,
 			];
 
 			// OpenAI API呼び出し
 			const response = await openai.chat.completions.create({
-				model: model,
+				model,
 				messages: apiMessages.map(msg => ({
 					role: msg.role as Message["role"],
 					content: msg.content
 				})),
-				temperature: temperature,
-				max_tokens: getEnvVariable("MAX_RESPONSE_LENGTH"),
+				temperature,
+				max_tokens: maxResponseLength,
 			});
 
 			const assistantReply = response.choices[0].message.content ?? "";

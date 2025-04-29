@@ -2,48 +2,37 @@ import { useChatGPT } from '@/useChatGPT';
 import { useGemini } from '@/useGemini';
 import { useConversation } from '@/useConversation';
 import { characterNames } from '@/characters';
-import type { LLMProvider, ProviderType } from '@/types';
+import type { LLMProvider } from '@/types';
 import { getConversationSettings } from '@/usePrompt';
+import { useStore } from '@/store';
 
-/**
- * 指定したLLMプロバイダで会話シミュレーションを実行
- * @param providerType - 使用するLLMプロバイダの種類
- * @param prompt - 会話の開始プロンプト
- * @param turns - 会話のターン数
- */
-async function startConversation(
-	{ providerType, prompt, turns }:
-		{ providerType: ProviderType; prompt: string; turns: number }
-) {
-	console.log(`${providerType}を使って会話を開始します。会話回数は${turns}回です。参加者は${characterNames.join('、')}です。`);
+// メイン処理
+async function startConversation() {
+
+	// 対話形式で会話設定を取得（内部でストアに保存される）
+	await getConversationSettings();
+
+	// 会話を開始（設定はストアから取得）
+	const { providerType, prompt, turns } = useStore.get();
+
+	console.log(`${providerType}を使って会話を開始します。参加者は${characterNames.join('、')}、会話回数は${turns}回です。`);
 	console.log(`プロンプト: "${prompt}"`);
 
 	// プロバイダの選択
 	let provider: LLMProvider;
 	if (providerType === 'chatgpt') {
-		provider = useChatGPT();
+		useStore.set({ provider: useChatGPT() })
 	} else {
-		provider = useGemini();
+		useStore.set({ provider: useGemini() })
 	}
 
-	// 会話フックを使用して会話を実行
-	const conversation = useConversation(prompt);
-	await conversation.runConversation({ provider, maxTurns: turns });
-}
-
-// メイン処理
-async function main() {
-	// コマンドライン引数を取得
-	const args = process.argv.slice(2);
-
-	// 対話形式で会話設定を取得
-	const settings = await getConversationSettings(args);
-
-	// 会話を開始
-	await startConversation(settings);
+	// 最初の会話を実行
+	const conversation = useConversation();
+	// 以降の会話の実行
+	await conversation.runConversation();
 }
 
 // プログラム実行
-main().catch((error) => {
+startConversation().catch((error) => {
 	console.error('エラーが発生しました:', error);
 });

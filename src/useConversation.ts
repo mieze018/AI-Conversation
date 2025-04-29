@@ -1,50 +1,31 @@
-import type { Character, Message, LLMProvider } from '@/types';
+import type { Character, Message } from '@/types';
 import { characters, characterNames, characterIds } from '@/characters';
 import * as fs from 'fs';
 import * as path from 'path';
-import { getEnvVariable } from '@/useEnv';
+import { useStore } from '@/store';
 
 /**
  * 会話履歴を管理
- * @param initialPrompt - 初期プロンプト
  */
-export function useConversation(initialPrompt?: string) {
-	// 会話履歴の状態
-	let history: Message[] = [];
-	const turnDelayMs = 3000; // ターン間の待機時間
-
-	/**
-	 * 会話履歴を取得
-	 */
-	const getHistory = () => [...history];
-
-	/**
-	 * 会話履歴をクリア
-	 */
-	const clearHistory = () => {
-		history = [];
-	};
-
-	/**
-	 * 会話履歴にメッセージを追加
-	 * @param message - 追加するメッセージ
-	 */
-	const addMessage = (message: Message) => {
-		history.push(message);
-	};
+export function useConversation() {
+	const { turns, maxResponseLength, customInstructions, prompt, provider, history } = useStore.get();
+	const turnDelayMs = 1000;
+	const getHistory = () => useStore.get().history;
+	const clearHistory = () => useStore.set({ history: [] });
+	const addMessage = (message: Message) => useStore.set({ history: [...history, message] });
 
 	/**
 	 * キャラクター用のシステムプロンプトを生成
 	 * @param character - キャラクター情報
 	 */
-	const generateSystemPrompt = (character: Character, maxTurns: number): string => {
+	const generateCharacterPrompt = (character: Character,): string => {
 		return `
 	- あなたは「${character.name}」というキャラクターです。会話の続きを自然な日本語で発言してください。
 	- 会話の参加メンバーは${characterNames.join('、')}です。
 	- あなたの設定: ${character.persona}
 	 あなたの役割: 会話の流れを考慮して、前の発言に自然に反応してください。会話がスムーズに進むように心がけてください。
-	- 一度の発言は、${getEnvVariable("MAX_RESPONSE_LENGTH")}文字以内に収めてください。
-	${getEnvVariable("CUSTOM_INSTRUCTIONS")}
+	- 一度の発言は、${maxResponseLength}文字以内に収めてください。
+	${customInstructions}
 	`;
 	};
 
@@ -100,21 +81,11 @@ export function useConversation(initialPrompt?: string) {
 
 	/**
 	 * キャラクター同士の会話シミュレーションを実行する
-	 * @param provider - 使用するLLMプロバイダ
-	 * @param maxTurns - 最大ターン数
-	 * @param firstPrompt - 会話開始時のプロンプト
 	 */
-	const runConversation = async ({
-		provider,
-		maxTurns,
-	}: {
-		provider: LLMProvider,
-		maxTurns: number,
-	}
-	): Promise<Message[]> => {
+	const runConversation = async (): Promise<Message[]> => {
 		console.log("--- 会話シミュレーション開始 ---");
 
-		for (let i = 0; i < maxTurns; i++) {
+		for (let i = 0; i < turns; i++) {
 			// 次に話すキャラクターを選択
 			const currentSpeakerKey = characterIds[i % characterIds.length];
 			const currentSpeaker = characters[currentSpeakerKey];
@@ -125,11 +96,7 @@ export function useConversation(initialPrompt?: string) {
 			}
 
 			// キャラクターに発言させる
-			const newMessage = await provider.sendMessage(
-				currentSpeaker,
-				getHistory(),
-				maxTurns,
-			);
+			const newMessage = await provider.sendMessage(currentSpeaker);
 
 			if (newMessage) {
 				addMessage(newMessage);
@@ -141,7 +108,7 @@ export function useConversation(initialPrompt?: string) {
 			}
 
 			// 次のターンの前に待機
-			if (i < maxTurns - 1) {
+			if (i < turns - 1) {
 				await wait();
 			}
 		}
@@ -152,9 +119,9 @@ export function useConversation(initialPrompt?: string) {
 		return getHistory();
 	};
 
-	// 初期プロンプトがあれば履歴に追加
-	if (initialPrompt) {
-		addMessage({ role: "system", content: initialPrompt });
+	// 初回の場合、初期プロンプトがあれば履歴に追加
+	if (!history.length && prompt) {
+		addMessage({ role: "system", content: prompt });
 	}
 
 
@@ -163,7 +130,7 @@ export function useConversation(initialPrompt?: string) {
 		getHistory,
 		clearHistory,
 		addMessage,
-		generateSystemPrompt,
+		generateCharacterPrompt,
 		printMessage,
 		wait,
 		saveConversationToFile,

@@ -1,75 +1,66 @@
-import type { Character, Message, LLMProvider } from './types';
-import { useConversation } from './useConversation';
+import type { Message, LLMProvider, AppState } from '@/types';
+import { useConversation } from '@/useConversation';
 import { GoogleGenAI } from '@google/genai';
-import { getEnvVariable, getProviderConfig } from './useEnv';
-
-// Gemini API の設定を取得
-const geminiConfig = getProviderConfig("gemini");
-
-// Gemini API クライアントを初期化 
-const genAI = new GoogleGenAI({ apiKey: geminiConfig.apiKey });
-if (!genAI) {
-	console.error("Gemini API client initialization failed.");
-	throw new Error("Gemini API client initialization failed.");
-}
-
-/**
- * Gemini APIを使用してコンテンツを生成
- * @param contents - コンテンツの内容
- * @param model - 使用するモデル名
- * @param temperature - 温度パラメータ
- * @returns 生成されたコンテンツ
- */
-const generateContent = async (
-	contents: string,
-	model: string = geminiConfig.model,
-	temperature: number = getEnvVariable("TEMPERATURE")
-) => {
-	const response = await genAI.models.generateContentStream({
-		model: model,
-		contents: contents,
-		config: {
-			temperature: temperature,
-		}
-	});
-	const result: string[] = [];
-	for await (const chunk of response) {
-		result.push(chunk.text || "");
-	}
-	return { response: result.join('') };
-}
+import { useStore } from '@/store';
 
 /**
  * Gemini用のフック
- * @param model - 使用するモデル名（省略時は環境変数から取得）
- * @param temperature - 温度パラメータ（省略時は環境変数から取得）
- * @returns GeminiのLLMプロバイダインターフェース
  */
-export function useGemini(
-	model: string = getEnvVariable("GEMINI_MODEL"),
-	temperature: number = getEnvVariable("TEMPERATURE")
-): LLMProvider {
+export function useGemini(): LLMProvider {
+	/**
+	 * Gemini APIを使用してコンテンツを生成
+	 * @param contents - プロンプト内容
+	 * @returns 生成されたコンテンツ
+	 */
+	const generateContent = async (
+		contents: AppState['prompt'],
+	) => {
+		// 実行時に最新のデータを取得
+
+		const { geminiApiKey: apiKey, geminiModel: model, temperature, } = useStore.get();
+
+		// Gemini API クライアントを初期化 
+		const genAI = new GoogleGenAI({ apiKey });
+		if (!genAI) {
+			throw new Error("Gemini API client initialization failed.");
+		}
+
+		const response = await genAI.models.generateContentStream({
+			model: model,
+			contents,
+			config: {
+				temperature: temperature,
+			}
+		});
+
+		const result: string[] = [];
+		for await (const chunk of response) {
+			result.push(chunk.text || "");
+		}
+		return { response: result.join('') };
+	}
+
+
 	const conversation = useConversation();
 
 	/**
 	 * メッセージを送信してGeminiからの応答を取得
 	 */
-	const sendMessage: LLMProvider['sendMessage'] = async (
-		character,
-		messages,
-		maxTurns
-	): Promise<Message | null> => {
+	const sendMessage: LLMProvider['sendMessage'] = async (character): Promise<Message | null> => {
 		try {
+			// 実行時に最新の履歴を取得
+			const { history } = useStore.get();
+
 			// システムプロンプトを生成
-			const systemPrompt = conversation.generateSystemPrompt(character, maxTurns);
+			const systemPrompt = conversation.generateCharacterPrompt(character);
 
 			// プロンプトを構築
 			const prompt = `${systemPrompt}
 - これまでの会話は以下の通りです:
-${messages.map(msg => `${msg.speaker || msg.role}: ${msg.content}`).join('\n')}
+${history.map(msg => `${msg.speaker || msg.role}: ${msg.content}`).join('\n')}
 `;
 			// Gemini API を呼び出し
-			const result = await generateContent(prompt, model, temperature);
+			const result = await generateContent(prompt);
 			const text = result.response.trim();
 
 			// 生成されたテキストから発言内容を抽出（形式をある程度強制する）

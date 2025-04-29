@@ -52,23 +52,11 @@
 
 ## 使い方
 
-### 基本的な実行方法
+下記のコマンドを実行すると、対話形式でオプションを設定し、会話を開始します。
 
-- `.env` でプロンプトを指定して実行します
-
-	```dotenv
-	DEFAULT_PROMPT=今日の天気について話そう
-	```
-
-	```bash
-	bun run start
-	```
-
-- または引数でプロンプトを指定して実行します
-
-	```bash
-	bun run start "今日の天気について話そう" 
-	```
+```bash
+bun run start
+```
 
 ## キャラクターの作成
 
@@ -103,15 +91,12 @@ export const charactersList = {
 
 ## カスタマイズ
 
-### デフォルト設定の変更
-
 `.env`ファイルで以下の設定をカスタマイズできます：
 
 | 設定項目 | 説明 |
 |---------|------|
-| `OPENAI_MODEL` | ChatGPT使用時のモデル |
-| `GEMINI_MODEL` | Gemini使用時のモデル |
 | `DEFAULT_PROVIDER` | デフォルトで使用するAIプロバイダー |
+| `DEFAULT_PROMPT` | デフォルトのプロンプト |
 | `TEMPERATURE` | 生成テキストのランダム性 。<br>創造的な会話: `1.0`〜`1.8`<br>一貫した応答: `0.2`〜`0.8` |
 | `MAX_RESPONSE_LENGTH` | 一度の発言の最大文字数。|
 | `CUSTOM_INSTRUCTIONS` | 指示をデフォルトから変更する場合に使用します。|
